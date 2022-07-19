@@ -30,6 +30,11 @@ Route::get('sign-in/github' , [HomeController::class , 'github' ])->name('github
 Route::get('sign-in/github/redirect' , [HomeController::class , 'githubRedirect']);
 
 
+Route::get('google/sign-in' , [HomeController::class , 'googleLogin'])->name('google-login');
+Route::get('google/redirect' , [HomeController::class , "googleRedirect"])->name('redirect');
+
+
+
 Route::Post('usersignup' , [UserController::class , "store" ]  )->name('store');
 Route::Post('userlogin' , [UserController::class ,"login"])->name('login');
 

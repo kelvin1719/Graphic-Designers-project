@@ -20,8 +20,14 @@ class HomeController extends Controller
     public function githubRedirect(){
 //        get Oauth request back from github to authenticate the user
 
-        $user = Socialite::driver('github')->user();
-        dd($user) ;
+        $gitUser = Socialite::driver('github')->user();
+        $user = User::firstOrCreate([
+            'email' => $gitUser->email
+        ],[
+            'email'=> $gitUser->email,
+            
+        ]
+    );
 
     }
 
@@ -32,6 +38,6 @@ class HomeController extends Controller
     public function googleRedirect(){
         // get oauth request back from google
         $googleUser = Socialite::driver('google')->user();
-        dd($googleUser);
+        
     }
 }
