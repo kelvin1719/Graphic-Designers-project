@@ -100,12 +100,16 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                 <li class="nav-item"><a class="nav-link" href="">Services</a></li>
-                <li class="nav-item"><a class="nav-link" href="">Portfolio</a></li>
                 <li class="nav-item"><a class="nav-link" href="">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="">Designers</a></li>
                 <li class="nav-item"><a class="nav-link" href="">Contact</a></li>
+                @if(!(\Illuminate\Support\Facades\Session::has('Users')))
                 <li class="nav-item"><a class="nav-link" data-toggle="modal" data-target="#exampleModal" >Log in</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{route('signup')}}">Sign up</a></li>
+                @else
+                    <li class="nav-item"><a id="logout" href="#" class="nav-link">Log Out</a></li>
+                    <li class="nav-item"><a class="nav-link" href="">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="">Portfolio</a></li>
+                @endif
             </ul>
         </div>
     </div>
@@ -145,14 +149,14 @@
 
                         <div   class="loader" style="display: none;">Loading...</div>
                         <p>Forgot your password ? <a href="#!">Click here</a></p>
-                        <p>Not a member? <a href="#!">Register</a></p>
+                        <p>Not a member? <a href="{{route('signup')}}">Register</a></p>
                         <p>or sign up with:</p>
                         <button type="button" class="btn btn-link btn-floating mx-1">
                             <i class="fab fa-facebook-f"></i>
                         </button>
 
                         <button type="button" class="btn btn-link btn-floating mx-1">
-                          <a href=" {{url('google/sign-in')}} ">  <i class="fab fa-google"></i> </a> 
+                          <a href=" {{url('google/sign-in')}} ">  <i class="fab fa-google"></i> </a>
                         </button>
 
                         <button type="button" class="btn btn-link btn-floating mx-1">
@@ -162,6 +166,7 @@
                         <button type="button" class="btn btn-link btn-floating mx-1">
                             <a href=" {{url('sign-in/github')}} ">  <i class="fab fa-github"></i> </a>
                         </button>
+
                     </div>
                 </form>
             </div>
@@ -182,6 +187,12 @@
 <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+
+
+
+
+
 
 <script>
     // $("window").ready(function(){
@@ -242,6 +253,7 @@
                        else if(data.status == 200){
                            $('.errorMessage').addClass('alert-success');
                            $('.errorMessage').html(data.msg);
+                           window.location = "{{route('home')}}";
                        }
 
 
@@ -256,6 +268,25 @@
 
        });
     // });
+
+
+    $('#logout').click(function(e){
+        $.ajax({
+            url:"/logout",
+            type:"GET" ,
+
+            success:function(data){
+                if(data.status == 200){
+                    console.log('hello World');
+                    window.location = "{{route('home')}}";
+                }
+            },
+            error:function(data){
+                console.log(data)
+            }
+        })
+    })
+
 </script>
 </body>
 </html>

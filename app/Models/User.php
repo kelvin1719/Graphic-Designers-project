@@ -29,6 +29,7 @@ class User extends Authenticatable
         'location',
         'role_id',
         'password',
+        'graphic_designer_role'
 
     ];
 

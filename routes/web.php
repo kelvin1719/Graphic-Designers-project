@@ -15,16 +15,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('', function () {
+//    return view('welcome');
+//});
 
-Route::get('home' , function(){
+Route::get('/' , function(){
     return view('home');
-});
+})->name('home');
 Route::get('signup' , function(){
     return view('signup');
 })->name('signup');
+
+Route::get('portfolio' , function(){
+   return view('portfolio');
+})->name('portfolio');
+
+Route::get('logout' , [UserController::class , 'logout'])->name('logout');
 
 Route::get('sign-in/github' , [HomeController::class , 'github' ])->name('github');
 Route::get('sign-in/github/redirect' , [HomeController::class , 'githubRedirect']);

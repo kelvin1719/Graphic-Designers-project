@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 use Laravel\Socialite\Facades\Socialite;
+use Throwable;
 
 class HomeController extends Controller
 {
@@ -20,14 +21,23 @@ class HomeController extends Controller
     public function githubRedirect(){
 //        get Oauth request back from github to authenticate the user
 
-        $gitUser = Socialite::driver('github')->user();
-        $user = User::firstOrCreate([
-            'email' => $gitUser->email
-        ],[
-            'email'=> $gitUser->email,
-            
-        ]
-    );
+        $githubUser = Socialite::driver('github')->user();
+        if($githubUser){
+          $user =   User::firstOrCreate([
+                'email', $githubUser->email
+            ],[
+                'email'=> $githubUser->email,
+                'role_id' => 2,
+                'account_type_id'=> 3
+            ]);
+          if($user){
+//              session(['Users' => $user->id]);
+              return 123;
+          }else{
+              return "false";   
+          }
+
+        }
 
     }
 
@@ -37,7 +47,25 @@ class HomeController extends Controller
     }
     public function googleRedirect(){
         // get oauth request back from google
-        $googleUser = Socialite::driver('google')->user();
-        
+        try{
+            $googleUser = Socialite::driver('google')->user();
+            $user = User::firstOrCreate([
+                'email'=> $googleUser->email
+            ],[
+                'email'=> $googleUser->email,
+                'role_id' => 2,
+                'account_type_id'=> 2
+
+            ]);
+
+            if($user){
+                return 123 ;
+            }else{
+                return 'false';
+            }
+        }catch(Throwable $th){
+            return redirect()->back();
+        }
+
     }
 }

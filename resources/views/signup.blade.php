@@ -12,17 +12,28 @@
     <link href="{{asset('asset/fontawesome-all.min.css')}}" rel="stylesheet" />
     <script src="{{asset('asset/jquery3.js')}}"></script>
     <script src="{{asset('asset/bootstrap.min.js')}}"></script>
+    <style>
+        .body-background{
+            background-image: linear-gradient(rgba(23,123,122,0.5) ,rgba(23,223,122,0.4)) , url('{{asset('asset/assets/img/portfolio/6.jpg')}}') ;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: right;
+        }
+    </style>
 {{--    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>--}}
 </head>
-<body class="bg-primary">
+<body class="body-background">
 <div id="layoutAuthentication">
     <div id="layoutAuthentication_content">
         <main>
             <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-7">
+                <div class="row ">
+                    <div class="col-lg-5">
                         <div class="card shadow-lg border-0 rounded-lg mt-5">
                             <div class="card-header"><h3 class="text-center font-weight-light my-4"><i class="fas fa-user"></i>Create Account</h3></div>
+                            <ul id="errormessage">
+
+                            </ul>
                             <div class="card-body">
                                 <form>
                                     @csrf
@@ -44,8 +55,9 @@
                                     <div class="form-floating mb-3">
                                         <select class="form-control" id="role" name="graphic_designer_role" type="text" placeholder="sdfdsfs" >
                                             <option disabled="disabled" selected> Please select reason for being here</option>
-                                            <option value="graphic designer" >Graphic Designer</option>
-                                            <option value="guest"> Guest</option>
+                                            <option value="graphic_designer" >Graphic Designer</option>
+                                            <option value="Ui_Ux" >Ui / Ux designer</option>
+                                            <option value="photographer"> Photographer</option>
                                         </select>
 {{--                                        <label for="inputEmail">Reason for being here</label>--}}
                                     </div>
@@ -90,10 +102,12 @@
                                 </form>
                             </div>
                             <div class="card-footer text-center py-3">
-                                <div class="small"><a href="login.html">Have an account? Go to home and log in</a></div>
+                                <div class="small"><a href="{{url('/')}}">Have an account? Go to home and log in</a></div>
                             </div>
                         </div>
                     </div>
+
+                </div>
                 </div>
             </div>
         </main>
@@ -110,7 +124,7 @@
         let phone = $('#phone').val();
         let location = $('#location').val();
         let email = $('#email').val();
-        let role = $('#role').val();
+        let graphic_designer_role = $('#role').val();
         let password = $('#password').val();
         let confirm_password = $('#confirm_password').val();
 
@@ -132,7 +146,7 @@
                 location,
                 phone,
                 confirm_password,
-                role
+                graphic_designer_role
 
             },
             type:"POST",
@@ -142,9 +156,19 @@
                 $('#phone').html(phone);
                 $('#location').html(location);
                 $('#email').html(email);
-                
+
 
                 console.log(data);
+                if(data.status == 403){
+
+                    $.each(data.data , function(index , value){
+                        $('#errormessage').append('<li>'+ value + '</li>');
+                    })
+                }
+                if(data.status ==200){
+
+                    window.location = "{{route('home')}}" ;
+                }
             },
             error:function(data){
                 console.log(data);

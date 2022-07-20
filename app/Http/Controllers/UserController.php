@@ -24,23 +24,24 @@ class UserController extends Controller
                     'email'=>'required|email|unique:user',
                     'phone'=>'required|digits:10|',
                     'location'=>"required|max:225",
-                    'role'=> 'required',
-                    'password' => 'required| min:4| max:7 |',
+                    'graphic_designer_role'=> 'required',
+                    'password' => 'required| same:confirm_password|required:confirm_password| min:4| max:7 |',
+                    'confirm_password' => 'min:4| max:7'
 
                 ]);
 
                 $checkDatabaseForUsers = User::all()->count();
-                return $checkDatabaseForUsers;
+
 
     //           LETS VALIDATE USER'S INPUT
 
                  $user = new User();
-                 $user["first_name"] = $request->first_name ;
-                 $user["last_name"] = $request->last_name;
+                 $user["first_name"] = $request->firstname ;
+                 $user["last_name"] = $request->lastname;
                  $user['email'] = $request->email;
                  $user['phone'] = $request->phone;
                  $user['location'] = $request->location;
-                 $user['role']= $request->graphic_designer_role ;
+                 $user['graphic_designer_role']= $request->graphic_designer_role ;
 
 
                  //HASH PASSWORD
@@ -92,6 +93,13 @@ class UserController extends Controller
             }
         }catch (\Throwable $th){
             return (new ResponseController())->errorResponse("Incorrect / Incomplete data" , $th->errors());
+        }
+    }
+
+    public function logout(Request $request){
+        if(session("Users")){
+            $request->session()->forget('Users');
+            return (new ResponseController())->successResponse('Logout Successfully' , null);
         }
     }
 
